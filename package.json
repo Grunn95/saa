@@ -4,7 +4,6 @@
   "main": "api/index.js",
   "dependencies": {
     "node-fetch": "^2.6.7",
-    "stremio-addon-sdk": "^1.1.0",
-    "micro": "^9.3.4"
+    "stremio-addon-sdk": "^1.1.0"
   }
 }
