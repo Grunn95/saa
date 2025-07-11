@@ -60,5 +60,4 @@ builder.defineCatalogHandler(async ({ type, id }) => {
   }
 });
 
-const handler = builder.getInterface();
-module.exports = (req, res) => handler(req, res);
+module.exports = builder.getInterface(); // <-- dit is de juiste export voor Vercel
