@@ -1,7 +1,5 @@
-const { createServer } = require("http");
 const { addonBuilder } = require("stremio-addon-sdk");
 const fetch = require("node-fetch");
-const { send } = require("micro");
 
 const manifest = {
   id: "org.rob.anilist.adult",
@@ -62,10 +60,5 @@ builder.defineCatalogHandler(async ({ type, id }) => {
   }
 });
 
-// De serverinterface ophalen
-const interface = builder.getInterface();
-
-// ✅ De function export zoals Vercel vereist
-module.exports = async (req, res) => {
-  interface(req, res); // req en res worden direct aan de handler doorgegeven
-};
+const handler = builder.getInterface();
+module.exports = (req, res) => handler(req, res);
