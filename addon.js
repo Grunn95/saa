@@ -44,5 +44,6 @@ builder.defineCatalogHandler(async ({ type, id }) => {
   return { metas };
 });
 
-export default builder.getInterface();
+export const handler = builder.getInterface();
+
 
