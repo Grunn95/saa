@@ -1,11 +1,10 @@
 {
   "name": "stremio-anilist-adult",
   "version": "1.0.0",
-  "main": "addon.js",
+  "main": "api/index.js",
   "dependencies": {
-    "node-fetch": "^3.3.2",
+    "node-fetch": "^2.6.7",
     "stremio-addon-sdk": "^1.1.0"
-  },
-  "type": "module"
+  }
 }
 
