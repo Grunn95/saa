@@ -62,4 +62,10 @@ builder.defineCatalogHandler(async ({ type, id }) => {
   }
 });
 
-module.exports = builder.getInterface();
+// ✅ Specifieke export voor Vercel Serverless Functions
+const handler = builder.getInterface();
+
+// Nodig voor Vercel (Node.js handler)
+module.exports = (req, res) => {
+  return handler(req, res);
+};
