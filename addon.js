@@ -8,13 +8,7 @@ const manifest = {
   description: "Adult anime catalogus op basis van Anilist",
   resources: ["catalog"],
   types: ["series"],
-  catalogs: [
-    {
-      type: "series",
-      id: "anilist_adult",
-      name: "Adult Anime (18+)"
-    }
-  ]
+  catalogs: [{ type: "series", id: "anilist_adult", name: "Adult Anime (18+)" }]
 };
 
 const builder = new addonBuilder(manifest);
@@ -34,25 +28,21 @@ query {
 
 builder.defineCatalogHandler(async ({ type, id }) => {
   if (type !== "series" || id !== "anilist_adult") return { metas: [] };
-
   const res = await fetch("https://graphql.anilist.co", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query })
   });
-
-  const json = await res.json();
-  const items = json.data.Page.media;
-
-  const metas = items.map(item => ({
-    id: `anilist:${item.id}`,
+  const items = (await res.json()).data.Page.media;
+  const metas = items.map(i => ({
+    id: `anilist:${i.id}`,
     type: "series",
-    name: item.title.romaji,
-    poster: item.coverImage.extraLarge,
-    description: item.description?.replace(/<[^>]*>/g, "").slice(0, 400) || ""
+    name: i.title.romaji,
+    poster: i.coverImage.extraLarge,
+    description: i.description?.replace(/<[^>]*>/g, "").slice(0, 400)
   }));
-
   return { metas };
 });
 
 export default builder.getInterface();
+
