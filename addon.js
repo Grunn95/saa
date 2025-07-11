@@ -1,5 +1,5 @@
-import { addonBuilder } from "stremio-addon-sdk";
-import fetch from "node-fetch";
+const { addonBuilder } = require("stremio-addon-sdk");
+const fetch = require("node-fetch");
 
 const manifest = {
   id: "org.rob.anilist.adult",
@@ -42,17 +42,17 @@ builder.defineCatalogHandler(async ({ type, id }) => {
       body: JSON.stringify({ query })
     });
 
-    if (!res.ok) throw new Error(`Anilist error ${res.status}`);
+    if (!res.ok) throw new Error("Anilist API error: " + res.status);
 
     const json = await res.json();
     const items = json?.data?.Page?.media || [];
 
     const metas = items.map(item => ({
-      id: `anilist:${item.id}`,
+      id: "anilist:" + item.id,
       type: "series",
       name: item.title.romaji,
       poster: item.coverImage.extraLarge,
-      description: item.description?.replace(/<[^>]*>/g, "").slice(0, 400) || ""
+      description: (item.description || "").replace(/<[^>]*>/g, "").slice(0, 400)
     }));
 
     return { metas };
@@ -62,6 +62,4 @@ builder.defineCatalogHandler(async ({ type, id }) => {
   }
 });
 
-// ✅ Voor Vercel compatibiliteit
-export const handler = builder.getInterface();
-
+module.exports = builder.getInterface();
