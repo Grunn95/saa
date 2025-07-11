@@ -39,4 +39,28 @@ builder.defineCatalogHandler(async ({ type, id }) => {
     const res = await fetch("https://graphql.anilist.co", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stri
+      body: JSON.stringify({ query })
+    });
+
+    const json = await res.json();
+    const items = json?.data?.Page?.media || [];
+
+    const metas = items.map(item => ({
+      id: `anilist:${item.id}`,
+      type: "series",
+      name: item.title.romaji,
+      poster: item.coverImage.extraLarge,
+      description: (item.description || "").replace(/<[^>]*>/g, "").slice(0, 400)
+    }));
+
+    return { metas };
+  } catch (err) {
+    console.error("❌ Fout in catalogHandler:", err);
+    return { metas: [] };
+  }
+});
+
+const handler = builder.getInterface();
+module.exports = async function (req, res) {
+  return handler(req, res);
+};
